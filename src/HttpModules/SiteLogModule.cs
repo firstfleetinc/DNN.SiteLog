@@ -92,8 +92,16 @@ namespace Dnn.Modules.SiteLog.HttpModules
                 var siteLogController = new SiteLogController();
 
                 var userInfo = UserController.Instance.GetCurrentUserInfo();
+
+                //BB modified 9/29/2023
+                string clientIp = request.Headers["CF-Connecting-IP"];
+                if (clientIp == null)
+                {
+                    clientIp = request.UserHostAddress;
+                }
+
                 siteLogController.AddSiteLog(portalId, userInfo.UserID, urlReferrer, request.Url.ToString(),
-                                       request.UserAgent, request.UserHostAddress, request.UserHostName,
+                                       request.UserAgent, clientIp, request.UserHostName,
                                        PortalSettings.Current.ActiveTab.TabID, affiliateId, siteLogBuffer,
                                        siteLogStorage);
             }
